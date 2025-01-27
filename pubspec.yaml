@@ -4,16 +4,16 @@ version: 1.0.0
 homepage: https://purefun.dev/posts/flutter-cookie-consent/
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=2.18.5 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  modal_bottom_sheet: ^2.1.2
-  shared_preferences: ^2.0.15
-  url_launcher: ^6.1.7
+  modal_bottom_sheet: ^3.0.0
+  shared_preferences: ^2.2.3
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

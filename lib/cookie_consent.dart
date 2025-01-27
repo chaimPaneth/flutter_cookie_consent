@@ -68,9 +68,8 @@ Future<void> removeCookieConsent({
   await prefs.remove('$sharedPrefrencesPrefix:$category');
 }
 
-showCookieConsent(
+Future<void> showCookieConsent(
   BuildContext context, {
-
   /// Pick a layot for your dialog
   CookieConsentLayout layout = CookieConsentLayout.floatingBottomSheet,
 
@@ -122,8 +121,26 @@ showCookieConsent(
 
   /// Whether the user can dismiss the sheet by clicking outside of it.
   bool dismissible = true,
-}) {
+}) async {
   categories ??= exampleCookieConsentCategories;
+
+  // Check if all necessary consents are already given
+  bool allConsentsGiven = true;
+  for (final category in categories) {
+    final consentGiven = await getCookieConsent(
+      category: category.id,
+      sharedPrefrencesPrefix: sharedPrefrencesPrefix,
+    );
+    if (!(consentGiven ?? false)) {
+      allConsentsGiven = false;
+      break;
+    }
+  }
+
+  // If all consents are given, skip showing the dialog
+  if (allConsentsGiven) {
+    return;
+  }
 
   showCustomizeIcon ??= ![CookieConsentLayout.cupertinoAlert].contains(layout);
   showCustomizeLabel ??= [
@@ -259,10 +276,7 @@ showCookieConsent(
           RichText(
               text: TextSpan(
                   style: TextStyle(
-                    // color: Colors.white,
-                    color: layout == CookieConsentLayout.materialSnackBar
-                        ? Colors.white
-                        : Colors.black,
+                    color: Colors.white,
                     // fontStyle: FontStyle.italic,
                   ),
                   children: consentSpans)),
@@ -348,7 +362,6 @@ showCookieConsent(
 
 showCustomizeCookieConsentDialog(
   BuildContext context, {
-
   /// Pick a layot for your dialog
   required CookieConsentLayout layout,
 
